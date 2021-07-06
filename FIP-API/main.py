@@ -65,19 +65,31 @@ class FranceInfo:
 			title = data.find("h1", {"class": "page-content content"})
 			title = data.find('span', {"class": "c-title__main"}).text
 
-			intro = reformat_text(data.find('div', {"class": "c-chapo"}).text)
+			try:
+				intro = reformat_text(data.find('div', {"class": "c-chapo"}).text)
+			except:
+				intro = ''
 
-			time = data.find('span', {"class": "publication-date__published"})
-			time = 'Publié ' + time.find('time').text
+			try:
+				time = data.find('span', {"class": "publication-date__published"})
+				time = 'Publié ' + time.find('time').text
+			except:
+				time = None
 
-			image = data.find('div', {"class": "c-cover--media"})
-			image = image.find('picture', {"class": "picture-wrapper"})
-			image = image.find('img')
-			image = image.get('src')
+			try:
+				image = data.find('div', {"class": "c-cover--media"})
+				image = image.find('picture', {"class": "picture-wrapper"})
+				image = image.find('img')
+				image = image.get('src')
+			except:
+				image = None
 
-			paragraph = data.find('div', {"class": "c-body"})
-			paragraphs = paragraph.findAll('p')
-			paragraphs = [self._paragraph_reformat(p) for p in paragraphs]
+			try:
+				paragraph = data.find('div', {"class": "c-body"})
+				paragraphs = paragraph.findAll('p')
+				paragraphs = [self._paragraph_reformat(p) for p in paragraphs]
+			except:
+				paragraphs = []
 
 			data[i] = {
 				'title':		title,
@@ -98,7 +110,6 @@ class FranceInfo:
 			text = l.text
 
 			rep[str(l)] = f"[{text}]({link})"
-
 
 		for key in rep:
 			paragraph = paragraph.replace(key, rep[key])
